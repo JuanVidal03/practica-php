@@ -1,5 +1,6 @@
 <?php
-    require_once("./Conexion.php");
+
+    include("../DB/Conexion.php");
 
     class ProductoDAO{
    
@@ -9,7 +10,7 @@
         public $precio;
         public $stock;
 
-        public function __construct($id, $titulo, $descripcion, $precio, $stock) {
+        public function __construct($id=null, $titulo=null, $descripcion=null, $precio=null, $stock=null) {
             $this->id = $id;
             $this->titulo = $titulo;
             $this->descripcion = $descripcion;
@@ -21,18 +22,17 @@
         // obteniedno todos los productos
         public function getAllProducts(){
             try {
-                
+
                 $instancia = new Connection('localhost', 'root', '', 'php_test');
-    
                 $conexion = $instancia->conectar();
                 $query = $conexion->prepare("SELECT * FROM productos");
                 $query->execute();
                 $productos = $query->fetchAll(PDO::FETCH_ASSOC);
                 
                 print_r(json_encode($productos));
-                
+                return $productos;
                 // desconectar la conexion
-                $instancia->desconectar();
+                //$instancia->desconectar();
                 
             } catch (PDOException $e) {
                 echo "Algo ha salido mal: {$e}";
