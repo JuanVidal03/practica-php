@@ -1,6 +1,7 @@
 <?php
+
 	// valores para conectarse con la base de datos
-	$db_name = 'php-test';
+	$db_name = 'php_test';
 	$db_user = 'root';
 	$db_password = '';
 	$db_host = 'localhost';
@@ -13,6 +14,7 @@
 		$sql->execute();
 		$productos = $sql->fetchAll();
 		print_r(json_encode($productos));
+
 	} catch (PDOException $error) {
 		echo $error->getMessage();
 	}
