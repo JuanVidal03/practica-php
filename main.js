@@ -43,9 +43,57 @@ const deleteProduct = async(id) => {
         const res = await fetch(`./controllers/deleteProductController.php?id=${id}`, {
             method: 'DELETE'
         });
+
         location.reload();
 
     } catch (error) {
         console.log(`Error al eliminar producto: ${error}`);
     }
 }
+
+
+// datos del formulario
+const form = document.querySelector('form');
+
+const formFields = () => {
+
+    const formData = new FormData(form);
+
+    const tituloField = formData.get('titulo');
+    const precioField = parseFloat(formData.get('precio'));
+    const stockField = parseInt(formData.get('stock'));
+    const descripcionField = formData.get('descripcion');
+    
+    const data = { tituloField, descripcionField, precioField, stockField };
+    return data;
+
+}
+
+
+// agregar producto
+const addProduct = async() => {
+
+    const data = formFields();
+    const { tituloField, descripcionField, precioField, stockField } = data;
+
+    try {
+        const res = await fetch(
+            `./controllers/addProductController.php?titulo=${tituloField}&descripcion=${descripcionField}&precio=${precioField}&stock=${stockField}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data,
+            }
+        );
+
+    } catch (error) {
+        console.log(`Error al agregar producto: ${error}`);
+    }
+
+}
+
+// evento del formulario
+form.addEventListener("submit", (e) => {
+    addProduct();
+})

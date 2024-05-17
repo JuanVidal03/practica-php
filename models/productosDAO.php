@@ -10,6 +10,7 @@
         public $precio;
         public $stock;
 
+        // constructor
         public function __construct($id=null, $titulo=null, $descripcion=null, $precio=null, $stock=null) {
             $this->id = $id;
             $this->titulo = $titulo;
@@ -38,7 +39,6 @@
             }
         }
 
-
         // eliminar un producto
         public function deleteProduct(int $id){
             try {
@@ -56,6 +56,20 @@
             }
         }
 
-    }
+        // agregar producto
+        public function addProduct(string $titulo, string $descripcion, float $precio, int $stock){
+            try {
 
+                $instancia = new Connection('localhost', 'root', '', 'php_test');
+                $conexion = $instancia->conectar();
+                $query = $conexion->prepare("INSERT INTO productos(titulo, descripcion, precio, stock) VALUES ('$titulo', '$descripcion', $precio, $stock)");
+                $query->execute();
+                return "Producto agregado con exito!";
+
+            } catch (PDOException $e) {
+                echo "Error al agregar producto: {$e->getMessage()}";
+            }
+        }
+
+    }
 ?>
