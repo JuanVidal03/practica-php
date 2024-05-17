@@ -19,7 +19,7 @@
         }
 
 
-        // obteniedno todos los productos
+        // obteniendo todos los productos
         public function getAllProducts(){
             try {
 
@@ -28,11 +28,10 @@
                 $query = $conexion->prepare("SELECT * FROM productos");
                 $query->execute();
                 $productos = $query->fetchAll(PDO::FETCH_ASSOC);
-                
-                print_r(json_encode($productos));
+            
                 return $productos;
-                // desconectar la conexion
-                //$instancia->desconectar();
+
+                $instancia->desconectar();
                 
             } catch (PDOException $e) {
                 echo "Algo ha salido mal: {$e}";
@@ -46,10 +45,11 @@
 
                 $instancia = new Connection('localhost','root', '', 'php_test');
                 $conexion = $instancia->conectar();
-                $query = $conexion->prepare("DELETE FROM productos WHERE id = {$id}");
+                $query = $conexion->prepare("DELETE FROM productos WHERE id = $id");
                 $query->execute();
-                
-                print_r(json_encode("Producto eliminado con exito!"));
+
+                return "Producto eliminado con exito!";
+                # print_r(json_encode("Producto eliminado con exito!"));
 
             } catch(PDOException $e){
                 echo "Error al eliminar producto: {$e->getMessage()}";
