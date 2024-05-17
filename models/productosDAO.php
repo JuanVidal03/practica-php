@@ -71,5 +71,23 @@
             }
         }
 
+        // obteniendo producto por id
+        public function productById($id){
+            try {
+                
+                $instancia = new Connection('localhost', 'root', '', 'php_test');
+                $conexion = $instancia->conectar();
+                $query = $conexion->prepare("SELECT * FROM productos WHERE id = ?");
+                $query->bindParam(1, $id);
+                $query->execute();
+                $producto = $query->fetch(PDO::FETCH_ASSOC);
+                
+                return $producto;
+
+            } catch (PDOException $e) {
+                echo "Error al encontrar el producto: {$e->getMessage()}";
+            }
+        }
+
     }
 ?>
