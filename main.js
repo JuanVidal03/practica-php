@@ -158,8 +158,12 @@ const updateProduct = async() => {
 // evento del formulario
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    addProduct();
-    // updateProduct();
+
+    // validando si se va a agregar o actualizar
+    const data = formFields();
+    const { id } = data;
+
+    id.value ? updateProduct() : addProduct();
 })
 
 
