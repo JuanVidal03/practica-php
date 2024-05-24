@@ -20,6 +20,9 @@ const allProducts = async() => {
                         <i
                             style="margin-right: 1rem;"
                             class="fa-solid fa-pen-to-square text-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                            onclick="showProductOnFormFields(${producto.id})"
                         ></i>
                         <i
                             class="fa-solid fa-trash text-danger"
@@ -32,6 +35,7 @@ const allProducts = async() => {
 
     } catch (error) {
         console.log(`Error al renderizar los productos: ${error.message}`);
+        console.log(error);
     }
 }
 allProducts();
@@ -51,34 +55,29 @@ const deleteProduct = async(id) => {
     }
 }
 
-
 // datos del formulario
 const form = document.querySelector('form');
-
 const formFields = () => {
 
-    const formData = new FormData(form);
+    const id = document.querySelector('#id');
+    const titulo = document.querySelector('#titulo');
+    const descripcion = document.querySelector('#descripcion');
+    const precio = document.querySelector('#precio');
+    const stock = document.querySelector('#stock');
 
-    const tituloField = formData.get('titulo');
-    const precioField = parseFloat(formData.get('precio'));
-    const stockField = parseInt(formData.get('stock'));
-    const descripcionField = formData.get('descripcion');
-    
-    const data = { tituloField, descripcionField, precioField, stockField };
+    const data = { id, titulo, descripcion, precio, stock }
     return data;
-
 }
-
 
 // agregar producto
 const addProduct = async() => {
 
     const data = formFields();
-    const { tituloField, descripcionField, precioField, stockField } = data;
+    const { titulo, descripcion, precio, stock } = data;
 
     try {
         const res = await fetch(
-            `./controllers/addProductController.php?titulo=${tituloField}&descripcion=${descripcionField}&precio=${precioField}&stock=${stockField}`, {
+            `./controllers/addProductController.php?titulo=${titulo.value}&descripcion=${descripcion.value}&precio=${precio.value}&stock=${stock.value}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -86,6 +85,7 @@ const addProduct = async() => {
                 body: data,
             }
         );
+        location.reload();
 
     } catch (error) {
         console.log(`Error al agregar producto: ${error}`);
@@ -93,7 +93,74 @@ const addProduct = async() => {
 
 }
 
+// mostrar valores en los campos del formulario
+const showProductOnFormFields = async (idProduct) => {
+
+    // actualizando titulo del formulario
+    const title = document.querySelector('.title');
+    title.textContent = 'Actualizar producto';
+    
+    // valores del formulario
+    const data = formFields();
+    const { id, titulo, descripcion, precio, stock } = data;
+
+    // encontrar producto
+    const resFindProduct = await fetch(`./controllers/productByIdController.php?id=${idProduct}`);
+    const findProduct = await resFindProduct.json();
+    
+    // actualizar valores del formulario
+    id.value = findProduct.id
+    titulo.value = findProduct.titulo;
+    descripcion.value = findProduct.descripcion;
+    precio.value = findProduct.precio;
+    stock.value = findProduct.stock;
+
+}
+
+// actualizar producto
+const updateProduct = async() => {
+
+    const data = formFields();
+    const { id, titulo, descripcion, precio, stock } = data;
+
+    try {
+
+        const updatedProduct = {
+            id: id.value,
+            titulo: titulo.value,
+            descripcion: descripcion.value,
+            precio: parseFloat(precio.value),
+            stock: parseInt(stock.value)
+        }
+
+        // actualizar producto
+        const res = await fetch(`./controllers/updateProductController.php?id=${updatedProduct.id}&titulo=${updatedProduct.titulo}&descripcion=${updatedProduct.descripcion}&precio=${updatedProduct.precio}&stock=${updatedProduct.stock}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: updatedProduct
+        });
+        location.reload();
+
+
+    } catch (error) {
+        console.log(`Error al actualizar producto: ${error}`);
+    }
+}
+
+
 // evento del formulario
 form.addEventListener("submit", (e) => {
-    addProduct();
+    e.preventDefault();
+    // addProduct();
+    updateProduct();
+})
+
+
+// cambiando el titulo del modal
+const addButton = document.querySelector('.add-button');
+addButton.addEventListener('click', () => {
+    const title = document.querySelector('.title');
+    title.textContent = 'Agregar producto';
 })

@@ -49,7 +49,7 @@
                 $query->execute();
 
                 return "Producto eliminado con exito!";
-                # print_r(json_encode("Producto eliminado con exito!"));
+                $instancia->desconectar();
 
             } catch(PDOException $e){
                 echo "Error al eliminar producto: {$e->getMessage()}";
@@ -65,6 +65,7 @@
                 $query = $conexion->prepare("INSERT INTO productos(titulo, descripcion, precio, stock) VALUES ('$titulo', '$descripcion', $precio, $stock)");
                 $query->execute();
                 return "Producto agregado con exito!";
+                $instancia->desconectar();
 
             } catch (PDOException $e) {
                 echo "Error al agregar producto: {$e->getMessage()}";
@@ -72,7 +73,7 @@
         }
 
         // obteniendo producto por id
-        public function productById($id){
+        public function productById(int $id){
             try {
                 
                 $instancia = new Connection('localhost', 'root', '', 'php_test');
@@ -83,9 +84,38 @@
                 $producto = $query->fetch(PDO::FETCH_ASSOC);
                 
                 return $producto;
+                $instancia->desconectar();
 
             } catch (PDOException $e) {
                 echo "Error al encontrar el producto: {$e->getMessage()}";
+            }
+        }
+
+        // actualizar producto
+        public function updateProduct(int $id, string $titulo, string $descripcion, float $precio, int $stock){
+            try {
+
+                $instancia = new Connection('localhost', 'root', '', 'php_test');
+                $conexion = $instancia->conectar();
+                $query = $conexion->prepare("UPDATE productos SET titulo=?, descripcion=?, precio=?, stock=? WHERE id = ?");
+                $query->bindParam(1, $titulo);
+                $query->bindParam(2, $descripcion);
+                $query->bindParam(3, $precio);
+                $query->bindParam(4, $stock);
+                $query->bindParam(5, $id);
+
+                $query->execute(); 
+
+                if ($query->rowCount() > 0) {
+                    return "Producto actualizado exitosamente";
+                } else {
+                    return "Ningun campo se ha sido actualizado";
+                }
+
+                $instancia->desconectar();
+
+            } catch (PDOException $e) {
+                echo "Error al actualizar producto: {$e->getMessage()}";
             }
         }
 
