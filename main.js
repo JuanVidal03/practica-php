@@ -21,11 +21,13 @@ const allProducts = async() => {
                             style="margin-right: 1rem;"
                             class="fa-solid fa-pen-to-square text-primary"
                             data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
+                            data-bs-target="#formModal"
                             onclick="showProductOnFormFields(${producto.id})"
                         ></i>
                         <i
                             class="fa-solid fa-trash text-danger"
+                            data-bs-target="#deleteModal"
+                            data-bs-toggle="modal"
                             onclick="deleteProduct(${producto.id})"
                         ></i>
                     </td>
@@ -41,14 +43,17 @@ const allProducts = async() => {
 allProducts();
 
 // eliminar producto
-const deleteProduct = async(id) => {
+const deleteProduct = (id) => {
     try {
+        // seleccionar el boton de eliminar y eliminar el producto
+        const deleteButton = document.querySelector('#delete-button');
+        deleteButton.addEventListener('click', async() => {
+            await fetch(`./controllers/deleteProductController.php?id=${id}`, {
+                method: 'DELETE'
+            });
+            location.reload();
+        })
 
-        const res = await fetch(`./controllers/deleteProductController.php?id=${id}`, {
-            method: 'DELETE'
-        });
-
-        location.reload();
 
     } catch (error) {
         console.log(`Error al eliminar producto: ${error}`);
@@ -153,8 +158,8 @@ const updateProduct = async() => {
 // evento del formulario
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    // addProduct();
-    updateProduct();
+    addProduct();
+    // updateProduct();
 })
 
 

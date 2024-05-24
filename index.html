@@ -34,13 +34,13 @@
             type="button"
             class="btn btn-success add-button"
             data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
+            data-bs-target="#formModal"
             >
             Agregar
         </button>
 
         <!-- modal agregar producto -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModal" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -76,6 +76,25 @@
                 </div>
               </div>
             </div>
+    </div>
+
+    <!-- modal de confirmacion de productos -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="deleteModalTitle">Eliminar Producto</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p id="deleteModalText">Estas seguro de eliminar este producto?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button id="delete-button" type="button" class="btn btn-primary">Confirmar</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- bootstap -->
