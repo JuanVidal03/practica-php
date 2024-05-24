@@ -11,3 +11,4 @@ En este proyecto se busca realizar un software desarrollado tanto con el MVC y g
 + **models:** Se encuentra la clase ProductoDAO y sus respectivos metodos para poder desarrollar el CRUD.
 + **DB:** En el archivo 'Conexion.php' se encuentra la conexion con la base de datos
 + **controllers:** Esta es la parte en donde se modulariza la logica del backend para luego poder consumirlo desde el archivo JavaScript.
++ **api:** En esta carpeta se encontrara el archivo api.php, donde se encuentra todo lo necesario para poder utilizarla desde cualquier frontend.
